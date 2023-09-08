@@ -11,8 +11,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class BluetoothService extends Service {
-    private Timer timer; // 借助定时器创建一个线程
+    private Timer timer; // 定时器，创建一个线程
     public BluetoothService() {
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        checkBluetooth();
     }
 
     @Override
@@ -21,7 +28,7 @@ public class BluetoothService extends Service {
         throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    private void checkBluetooth(){
+    private void  checkBluetooth(){
         if (timer == null){
             timer = new Timer();
 
@@ -30,10 +37,12 @@ public class BluetoothService extends Service {
                 @Override
                 public void run() {
                     // 创建消息对象
-                    Message msg = MainActivity.handler.obtainMessage();  // 获取一个消息对象
+                    Message msg = MainActivity.handler.obtainMessage();
 
-                    // 获取蓝牙信息 并且将消息封装到bundle中
+                    // 需要将消息先封装到bundle中
                     Bundle bundle = new Bundle();
+
+                    // 获取蓝牙状态信息
                     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (bluetoothAdapter != null){
                         boolean flag = bluetoothAdapter.isEnabled();
@@ -53,7 +62,7 @@ public class BluetoothService extends Service {
             };
 
             // 延迟1s开始监测，之后每隔5s执行一次
-            timer.schedule(task,1*1000,5*1000);
+            timer.schedule(task,1*1000,1*1000);
         }
     }
 }

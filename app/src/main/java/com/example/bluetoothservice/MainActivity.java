@@ -3,6 +3,7 @@ package com.example.bluetoothservice;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,13 +23,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_bluetooth);
 
-        tv_status = findViewById(R.id.tv_status);
+        setTitle("检测蓝牙");
+        tv_status = (TextView)findViewById(R.id.tv_status);
+        tv_status.setText("...");
     }
 
     // 点击按钮，启动服务
     public void clickBluetooth(View view){
         if (R.id.btn_check == view.getId()){
-//            Intent intent = new
+            Intent intent = new Intent(this, BluetoothService.class);
+            Toast.makeText(MainActivity.this, "启动蓝牙检测服务", Toast.LENGTH_LONG).show();
+            startService(intent);
         } else {
             Toast.makeText(MainActivity.this, "No control", Toast.LENGTH_LONG).show();
         }
@@ -40,13 +45,16 @@ public class MainActivity extends AppCompatActivity {
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
 
+            // 先获取bundle，再通过key值解出信息
             Bundle bundle = msg.getData();
             String msg_bluetooth = bundle.getString("status");
 
+            // 时间格式化
             Date currentDate = new Date(System.currentTimeMillis());
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String strDate = dateFormat.format(currentDate);
 
+            // 显示解出来的蓝牙状态信息
             tv_status.setText(strDate + " " + msg_bluetooth);
         }
     };
