@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.bluetoothservice'
+    namespace 'com.example.monitorservice'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.bluetoothservice"
+        applicationId 'com.example.monitorservice'
         minSdk 24
         targetSdk 33
         versionCode 1

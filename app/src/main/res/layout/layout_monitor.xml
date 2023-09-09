@@ -8,11 +8,16 @@
         android:id="@+id/btn_check"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="检测蓝牙"
-        android:onClick="clickBluetooth"
+        android:text="检测"
+        android:onClick="clickService"
         />
     <TextView
-        android:id="@+id/tv_status"
+        android:id="@+id/tv_blueStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <TextView
+        android:id="@+id/tv_netStatus"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />

@@ -1,0 +1,65 @@
+package com.example.monitorservice;
+
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.os.Message;
+import android.util.Log;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+public class NetService extends Service {
+    private static final String TAG = "NetService";
+    private Timer timer;
+
+    public NetService() {
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        checkNet();
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service.
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void checkNet() {
+        if (timer == null) {
+            timer = new Timer();
+
+            TimerTask task = new TimerTask() {
+                @Override
+                public void run() {
+                    Message msg = MainActivity.handler.obtainMessage(2);
+                    Bundle bundle = new Bundle();
+
+                    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+                    if (netInfo != null && netInfo.isConnected()) {
+                        // 网络已连接
+                        bundle.putString("net_status", "网络已连接");
+                    } else {
+                        // 网络已断开
+                        bundle.putString("net_status", "网络已断开");
+                    }
+
+                    // 发送消息对象，发送成功的话，就会回调handleMessage()
+                    msg.setData(bundle);
+                    MainActivity.handler.sendMessage(msg);
+                    Log.d(TAG, "checkNet(): " + msg);
+                }
+            };
+
+            timer.schedule(task, 1 * 1000, 2 * 1000);
+        }
+    }
+}

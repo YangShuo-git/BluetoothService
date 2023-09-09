@@ -1,4 +1,4 @@
-package com.example.bluetoothservice;
+package com.example.monitorservice;
 
 import android.content.Context;
 
