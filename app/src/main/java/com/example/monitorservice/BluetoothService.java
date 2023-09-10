@@ -15,8 +15,8 @@ import java.util.TimerTask;
 public class BluetoothService extends Service {
     private static final String TAG = "BluetoothService";
     private Timer timer; // 定时器，创建一个线程
-
     private BluetoothBinder bluetoothBinder = new BluetoothBinder();
+
     public BluetoothService() {
     }
 
@@ -39,6 +39,7 @@ public class BluetoothService extends Service {
     public class BluetoothBinder extends Binder {
 
     }
+
     private void  checkBluetooth(){
         if (timer == null){
             timer = new Timer();

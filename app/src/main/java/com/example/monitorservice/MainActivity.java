@@ -35,13 +35,12 @@ public class MainActivity extends AppCompatActivity {
         tv_blueStatus = findViewById(R.id.tv_blueStatus);
         tv_netStatus = findViewById(R.id.tv_netStatus);
     }
+
     private ServiceConnection mBluetoothConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            // 服务连接成功后回调
+            // 绑定服务成功后回调  立马获取binder对象
             Log.d(TAG, "onServiceConnected....");
-
-            // 获取binder对象
             bluetoothBinder = (BluetoothService.BluetoothBinder) service;
         }
         @Override
@@ -51,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             bluetoothBinder = null;
         }
     };
+
     private ServiceConnection mNetConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
             netBinder = null;
         }
     };
+
     // 点击按钮，绑定服务
     public void clickService(View view){
         if (R.id.btn_check == view.getId()) {
