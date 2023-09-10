@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Message;
@@ -16,6 +17,7 @@ import java.util.TimerTask;
 public class NetService extends Service {
     private static final String TAG = "NetService";
     private Timer timer;
+    private NetBinder netBinder = new NetBinder();
 
     public NetService() {
     }
@@ -28,8 +30,13 @@ public class NetService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
+        return netBinder;
         // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
+        // throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public class NetBinder extends Binder {
+
     }
 
     public void checkNet() {
