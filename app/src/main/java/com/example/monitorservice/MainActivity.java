@@ -1,5 +1,6 @@
 package com.example.monitorservice;
 
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
@@ -10,7 +11,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -65,11 +65,12 @@ public class MainActivity extends AppCompatActivity {
 
     // 点击按钮，绑定服务
     public void clickService(View view){
-        if (R.id.btn_check == view.getId()) {
+        if (view.getId() == R.id.btn_check) {
             Log.d(TAG, "启动检测服务....");
 
-            Intent intentBlue = new Intent(this, BluetoothService.class);
-            bindService(intentBlue, mBluetoothConnection, BIND_AUTO_CREATE);
+            Intent intentBluetooth = new Intent(this, BluetoothService.class);
+            // bindService会拉起服务，新起一个线程，但仍然在同一个进程中
+            bindService(intentBluetooth, mBluetoothConnection, BIND_AUTO_CREATE);
 
             Intent intentNet = new Intent(this, NetService.class);
             bindService(intentNet, mNetConnection, BIND_AUTO_CREATE);
@@ -78,13 +79,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // 接收服务传来的消息
+    // Activity和Service两者是线程间通信，所以需要使用Handler
+    @SuppressLint("HandlerLeak")
     public static Handler handler = new Handler() {
         @Override
         public void handleMessage(@NonNull Message msg) {
             super.handleMessage(msg);
 
-            // 先获取bundle，后续再通过key值取出信息
+            // 1、先获取bundle，后续再通过key值取出信息
             Bundle bundle = msg.getData();
 
             // 格式化时间
@@ -92,12 +94,11 @@ public class MainActivity extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String strDate = dateFormat.format(currentDate);
 
-            // 在一个 Handler 中处理多个消息时，可以使用不同的消息标识符（what）来区分不同的消息
+            // 2、一个Handler处理多个消息时，可以使用不同的消息标识符（what）来区分不同的消息，复用Handler
             switch (msg.what) {
                 case 1:
-                    // 通过key值，取出对应的消息
+                    // 3、通过bundle的key值，取出对应的消息
                     String msg_bluetooth = bundle.getString("blue_status");
-                    // 显示信息
                     tv_blueStatus.setText(strDate + " " + msg_bluetooth);
                     break;
                 case 2:
