@@ -44,14 +44,13 @@ public class BluetoothService extends Service {
         if (timer == null){
             timer = new Timer();
 
-            // 设置定时任务（线程）
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
-                    // 1、创建消息对象 Message，其消息标识符为1
-                    Message msg = MainActivity.handler.obtainMessage(1);
+                    // 1、通过handler创建消息对象，必须设置消息标识符（这里用的就是 MainActivity中的 handler）
+                    Message msg = MainActivity.handler.obtainMessage(MainActivity.MSG_BLUETOOTH);
 
-                    // 2、需要先用bundle封装消息，然后把bundle设置进Message中
+                    // 2、这里通过bundle打包消息，然后再将该bundle设置进Message
                     Bundle bundle = new Bundle();
                     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (bluetoothAdapter != null){
@@ -66,14 +65,14 @@ public class BluetoothService extends Service {
                     }
                     msg.setData(bundle);
 
-                    // 3、发送消息对象，发送成功的话，MainActivity的Handler就会回调handleMessage()
+                    // 3、通过handler发送消息对象，发送成功的话，MainActivity的Handler就会回调handleMessage()
                     MainActivity.handler.sendMessage(msg);
                     Log.d(TAG, "checkBluetooth(): " + msg);
                 }
             };
 
             // 延迟1s开始监测，之后每隔5s执行一次
-            timer.schedule(task,1*1000,10*1000);
+            timer.schedule(task,1*1000,5*1000);
         }
     }
 }

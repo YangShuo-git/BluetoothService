@@ -46,11 +46,12 @@ public class NetService extends Service {
             TimerTask task = new TimerTask() {
                 @Override
                 public void run() {
-                    Message msg = MainActivity.handler.obtainMessage(2);
-                    Bundle bundle = new Bundle();
-
+                    // 获取网络信息
                     ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
                     NetworkInfo netInfo = cm.getActiveNetworkInfo();
+
+                    Message msg = MainActivity.handler.obtainMessage(MainActivity.MSG_NET);
+                    Bundle bundle = new Bundle();
                     if (netInfo != null && netInfo.isConnected()) {
                         // 网络已连接
                         bundle.putString("net_status", "网络已连接");
@@ -59,14 +60,13 @@ public class NetService extends Service {
                         bundle.putString("net_status", "网络已断开");
                     }
 
-                    // 发送消息对象，发送成功的话，就会回调handleMessage()
                     msg.setData(bundle);
                     MainActivity.handler.sendMessage(msg);
                     Log.d(TAG, "checkNet(): " + msg);
                 }
             };
 
-            timer.schedule(task, 1 * 1000, 2 * 1000);
+            timer.schedule(task, 1 * 1000, 1 * 1000);
         }
     }
 }

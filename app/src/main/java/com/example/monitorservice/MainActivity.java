@@ -25,6 +25,9 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothService.BluetoothBinder bluetoothBinder;
     private NetService.NetBinder netBinder;
 
+    public static final int MSG_BLUETOOTH = 1;
+    public static final int MSG_NET = 2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Activity和Service两者是线程间通信，所以需要使用Handler
+    // Activity和Service两者是线程间通信，需要使用Handler
     @SuppressLint("HandlerLeak")
     public static Handler handler = new Handler() {
         @Override
@@ -94,14 +97,14 @@ public class MainActivity extends AppCompatActivity {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String strDate = dateFormat.format(currentDate);
 
-            // 2、一个Handler处理多个消息时，可以使用不同的消息标识符（what）来区分不同的消息，复用Handler
+            // 2、一个Handler处理多个消息时，可以使用不同的消息标识符（what）来区分不同的消息
             switch (msg.what) {
-                case 1:
+                case MSG_BLUETOOTH:
                     // 3、通过bundle的key值，取出对应的消息
                     String msg_bluetooth = bundle.getString("blue_status");
                     tv_blueStatus.setText(strDate + " " + msg_bluetooth);
                     break;
-                case 2:
+                case MSG_NET:
                     String msg_net = bundle.getString("net_status");
                     tv_netStatus.setText(strDate + " " + msg_net);
             }
