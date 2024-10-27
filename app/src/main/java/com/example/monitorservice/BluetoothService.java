@@ -23,7 +23,6 @@ public class BluetoothService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(TAG, "onCreate");
 
         checkBluetooth();
     }
@@ -50,7 +49,7 @@ public class BluetoothService extends Service {
                     // 1、通过handler创建消息对象，必须设置消息标识符（这里用的就是 MainActivity中的 handler）
                     Message msg = MainActivity.handler.obtainMessage(MainActivity.MSG_BLUETOOTH);
 
-                    // 2、这里通过bundle打包消息，然后再将该bundle设置进Message
+                    // 2、这里通过bundle打包消息内容，然后再将该bundle设置进Message
                     Bundle bundle = new Bundle();
                     BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     if (bluetoothAdapter != null){
@@ -67,7 +66,7 @@ public class BluetoothService extends Service {
 
                     // 3、通过handler发送消息对象，发送成功的话，MainActivity的Handler就会回调handleMessage()
                     MainActivity.handler.sendMessage(msg);
-                    Log.d(TAG, "checkBluetooth(): " + msg);
+                    //Log.d(TAG, "checkBluetooth(): " + msg);
                 }
             };
 

@@ -62,7 +62,7 @@ public class NetService extends Service {
 
                     msg.setData(bundle);
                     MainActivity.handler.sendMessage(msg);
-                    Log.d(TAG, "checkNet(): " + msg);
+                    //Log.d(TAG, "checkNet(): " + msg);
                 }
             };
 
